@@ -35,11 +35,11 @@ class PayPalController extends Controller
                 }
             }
             return redirect()
-                ->route('createTransaction')
+                ->route('homepage')
                 ->with('error', 'Something went wrong.');
         } else {
             return redirect()
-                ->route('createTransaction')
+                ->route('homepage')
                 ->with('error', $response['message'] ?? 'Something went wrong.');
         }
     }
@@ -56,11 +56,11 @@ class PayPalController extends Controller
         $response = $provider->capturePaymentOrder($request['token']);
         if (isset($response['status']) && $response['status'] == 'COMPLETED') {
             return redirect()
-                ->route('createTransaction')
+                ->route('homepage')
                 ->with('success', 'Transaction complete.');
         } else {
             return redirect()
-                ->route('createTransaction')
+                ->route('homepage')
                 ->with('error', $response['message'] ?? 'Something went wrong.');
         }
     }

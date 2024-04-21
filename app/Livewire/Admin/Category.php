@@ -9,22 +9,31 @@ use App\Models\Category as CategoryModel;
 
 class Category extends Component
 {
-    public $name;
-    #[Layout('components.layouts.app')]
-    #[Title('Category')]
+    public $name = '';
+
+    protected $rules = [
+        'name' => 'required'
+    ];
+
+    public function resetFields()
+    {
+        $this->name = '';
+    }
+
     public function render()
     {
         $categories = CategoryModel::all();
-        return view('livewire.admin.category',compact('categories'));
+        return view('livewire.admin.category', compact('categories'))->layout('layouts.admin', ['title' => 'Categories']);
     }
 
     public function create()
     {
-        $validatedData = $this->validate([
-            'name'=>'required|unique:categories,name',
+        $this->validate();
+        CategoryModel::create([
+            'name' => $this->name
         ]);
-        CategoryModel::create($validatedData);
-        $this->name = '';
+        session()->flash('success','Category Created Successfully!!');
+        $this->reset();
     }
 
     public function delete($id)
